@@ -1,0 +1,10 @@
+*__pycache__*
+*.env
+
+notebooks/output
+notebooks/results
+data
+ui/example_map.html
+ui/mymapnew.html
+logfile_long_lat.log
+ui/app/assets

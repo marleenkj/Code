@@ -1,0 +1,25 @@
+name: Get distances train
+on:
+  workflow_dispatch:
+
+jobs:
+  get_distance:
+    runs-on: sagemaker
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v3
+
+#TODO add a step to create the environment if not already existing
+#Or better: use a docker image with python and requirements already installed
+
+      - name: Install requirements
+        run: |
+          conda activate /home/ec2-user/SageMaker/venvs/sustainable-transport
+          pip install -r requirements.txt
+      
+      - name: Run get_distances_train.py
+        run: |
+          conda activate /home/ec2-user/SageMaker/venvs/sustainable-transport
+          python -m scripts.get_distances_train_harversine

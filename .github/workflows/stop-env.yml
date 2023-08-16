@@ -1,0 +1,25 @@
+name: Stop Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'Name of branch environment to stop'
+        required: true
+        default: 'main'
+        type: string
+
+env:
+  REPOSITORY_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  stop_env:
+    runs-on: sagemaker
+    steps:
+      - name: Remove dev env stack
+        run: docker stack rm ${REPOSITORY_NAME}-${{ inputs.branch_name }}
+        if: inputs.branch_name != 'main'
+
+      - name: Remove prod env stack
+        run: docker stack rm ${REPOSITORY_NAME}
+        if: inputs.branch_name == 'main'

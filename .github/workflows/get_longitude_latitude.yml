@@ -1,0 +1,28 @@
+name: Get longitude latitude
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get_longitude_latitude:
+    runs-on: sagemaker
+    env: 
+      BING_API_KEY: ${{ secrets.BING_API_KEY }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v3
+
+#TODO add a step to create the environment if not already existing
+#Or better: use a docker image with python and requirements already installed
+
+      - name: Install requirements
+        run: |
+          conda activate /home/ec2-user/SageMaker/venvs/sustainable-transport
+          pip install -r requirements.txt
+      
+      - name: Run get_longitude_latitude.py
+        run: |
+          conda activate /home/ec2-user/SageMaker/venvs/sustainable-transport
+          python -m scripts.get_longitude_latitude

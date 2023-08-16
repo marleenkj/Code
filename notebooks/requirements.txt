@@ -1,0 +1,6 @@
+python-dotenv
+openrouteservice
+numpy
+pandas
+pandas-profiling
+folium

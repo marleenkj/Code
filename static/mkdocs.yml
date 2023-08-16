@@ -1,0 +1,59 @@
+site_name: Service-Backbone
+site_url: !ENV SITE_URL
+copyright: 'Copyright © 2022 Safran'
+repo_url: !ENV PROJECTURL
+
+extra:
+    API_URL: !ENV API_URL
+    DASH_URL: !ENV DASH_URL
+    SITE_URL: !ENV SITE_URL
+
+plugins:
+  - macros
+  - search
+
+theme:
+    name: material
+    palette:
+        primary: deep purple
+        accent: amber
+
+nav:
+    - index.md
+    - Docs:
+        - Getting started: docs.md
+    - Api: 
+        - Getting started: api.md
+        - link: !ENV API_URL
+    - Webapp:
+        - Getting started: webapp.md
+        - link: !ENV DASH_URL
+
+markdown_extensions:
+    - admonition
+    - footnotes
+    - codehilite:
+        guess_lang: false
+    - toc:
+        permalink: true
+    - pymdownx.arithmatex:
+        generic: true
+    - pymdownx.highlight:
+        anchor_linenums: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences:
+        custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.fence_code_format
+    - def_list
+    - pymdownx.tasklist:
+        custom_checkbox: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+
