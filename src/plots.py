@@ -19,7 +19,12 @@ color = sns.color_palette().as_hex()
 
 import plotly.io as pio
 pio.templates["my_modification"] = go.layout.Template(
-    layout=dict(font={"size": 12, "family": "arial"})
+    layout=dict(
+        font={"size": 13, "family": "arial"},
+        colorway = ["#57B38E", "#50A382", "#468B6F", "#3B705A", "#305847", "#2B4C3E"],
+        xaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"}),
+        yaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"})
+    )
 )
 template = "plotly_white+my_modification"
 pio.templates.default = template
