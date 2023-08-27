@@ -27,7 +27,7 @@ co2_emissions_multimodal = dbc.Card([
 layout = html.Div([
     dbc.Row([dcc.Markdown(
     '''
-    #### Combined vs. Intermodal vs. Multimodal
+    #### Combined vs. Intermodal Freight Transportation
     '''
     )]),
     # Dropdown Menu for DC and Pickup Date

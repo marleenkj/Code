@@ -21,7 +21,10 @@ import plotly.io as pio
 pio.templates["my_modification"] = go.layout.Template(
     layout=dict(
         font={"size": 13, "family": "arial"},
-        colorway = ["#57B38E", "#50A382", "#468B6F", "#3B705A", "#305847", "#2B4C3E"],
+        #colorway = ["#57B38E", "#50A382", "#468B6F", "#3B705A", "#305847", "#2B4C3E"],
+        #colorway = [px.colors.sequential.Greys[i] for i in [4]],
+        colorway = ["#626469"],
+        mapbox_style="carto-positron",
         xaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"}),
         yaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"})
     )
@@ -384,7 +387,7 @@ def graph_solution_with_radius_old(df, dict_results, dict_terminals, closest_dct
             
     fig.update_layout(mapbox_style="open-street-map", height=800, width=800)
     fig.show()
-    
+
     
 def show_clients(df):
     df = df.groupby(['Shipper longitude','Shipper latitude', 'Receiver longitude', 'Receiver latitude','Receiver name', 'Shipper name']).sum().reset_index()
@@ -402,17 +405,19 @@ def show_clients_dc(df, path_plot = False, name_dc = "DC"):
     df = df.groupby(['Shipper longitude','Shipper latitude', 'Receiver longitude', 'Receiver latitude','Receiver name', 'Shipper name']).sum().reset_index()
     fig = go.Figure()
     fig.add_trace(go.Scattermapbox(lat=df['Receiver latitude'].to_list(), lon=df['Receiver longitude'].to_list(), 
-                                   mode = 'markers', marker = {'size': 4}, name = "Clients",
-                                   customdata=df[["Receiver name", "Sender weight (kg)"]],
+                                   mode = 'markers', marker = {'size': 4, "color": "#626469"},  name = "Clients",
+                                   customdata=df[["Receiver name", "Sender weight (kg)"]], 
                                    hovertemplate='''<br>%{customdata[0]}: %{customdata[1]}kg<br>%{lat},%{lon}<br><extra></extra>'''))
-    for i in df["Shipper name"].unique():
-        df_temp = df[df["Shipper name"] == i]
+    color_dc = ["#42B4E6","#C40D20"]
+    for i in range(len(df["Shipper name"].unique())):
+        dc_name = list(df["Shipper name"].unique())[i]
+        df_temp = df[df["Shipper name"] == dc_name]
         fig.add_trace(go.Scattermapbox(lat=[df_temp["Shipper latitude"].iloc[0]], lon=[df_temp["Shipper longitude"].iloc[0]], 
-                                   mode = 'markers', marker = {'size': 8}, name = i))
+                                   mode = 'markers', marker = {'size': 12, "color": color_dc[i]}, name = dc_name))
     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 40}, mapbox={
                       'zoom': 4, "center": {'lat': df["Receiver latitude"].mean(), 'lon': df["Receiver longitude"].mean()}})
     fig.update_layout(legend=legend_layout)
-    fig.update_layout(mapbox_style="open-street-map", height = 500, width = 500)
+    fig.update_layout(mapbox_style="carto-positron", height = 600, width = 500)
     if path_plot == False:
         return fig
     else:
@@ -430,7 +435,7 @@ def show_clients_per_dc(df, path_plot = False):
     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 40}, mapbox={
                       'zoom': 4, "center": {'lat': df["Receiver latitude"].mean(), 'lon': df["Receiver longitude"].mean()}})
     fig.update_layout(legend=legend_layout)
-    fig.update_layout(mapbox_style="open-street-map", height = 500, width = 500)
+    fig.update_layout(mapbox_style="carto-positron", height = 500, width = 500)
     if path_plot == False:
         return fig
     else:
@@ -440,21 +445,23 @@ def show_clients_per_dc_and_both(df, path_plot = False):
     df = df.groupby(['Shipper longitude','Shipper latitude', 'Receiver longitude', 'Receiver latitude','Receiver name', 'Shipper name']).sum().reset_index()
     df = df.merge(df.groupby(df["Receiver name"])["Shipper name"].aggregate(lambda x: len((x.unique()))).reset_index().rename({"Shipper name":"Shipper"}, axis = 1), on = "Receiver name", how = "left")
     fig = go.Figure()
+    color_dc = ["#42B4E6","#C40D20"]
     for i in list(df["Shipper name"].unique()):
+        index_dc = list(df["Shipper name"].unique()).index(i)
         df_temp = df[(df["Shipper name"]==i)&(df["Shipper"]!=2)]
         fig.add_trace(go.Scattermapbox(lat=df_temp['Receiver latitude'].to_list(), lon=df_temp['Receiver longitude'].to_list(), 
-                                   mode = 'markers', marker = {'size': 4}, name = f"Clients of {i}",
+                                   mode = 'markers', marker = {'size': 4, 'color': color_dc[index_dc]}, name = f"Clients of {i}",
                                    customdata=df_temp[["Receiver name", "Sender weight (kg)"]],
                                    hovertemplate='''<br>%{customdata[0]}: %{customdata[1]}kg<br><extra></extra>'''))
     df_temp = df[(df["Shipper"]==2)]
     fig.add_trace(go.Scattermapbox(lat=df_temp['Receiver latitude'].to_list(), lon=df_temp['Receiver longitude'].to_list(), 
-                                   mode = 'markers', marker = {'size': 4}, name = f"Clients of both",
+                                   mode = 'markers', marker = {'size': 4, "color": "grey"}, name = f"Clients of both",
                                    customdata=df_temp[["Receiver name", "Sender weight (kg)"]],
                                    hovertemplate='''<br>%{customdata[0]}: %{customdata[1]}kg<br><extra></extra>'''))
     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 40}, mapbox={
                       'zoom': 4, "center": {'lat': df["Receiver latitude"].mean(), 'lon': df["Receiver longitude"].mean()}})
     fig.update_layout(legend=legend_layout)
-    fig.update_layout(mapbox_style="open-street-map", height = 500, width = 500)
+    fig.update_layout(mapbox_style="carto-positron", height = 600, width = 500)
     if path_plot == False:
         return fig
     else:

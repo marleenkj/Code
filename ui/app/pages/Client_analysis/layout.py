@@ -58,13 +58,13 @@ layout = html.Div([
             ftl_train
             ],width = 6, align = 'center'),
     ], align="center", style = ROW_STYLE),
-    dbc.Row([
-        dbc.Col([
-            table_clients,
-            dcc.Dropdown(id="dropdown-client", style = FONT_STYLE),
-            ], width = 6, align = 'center'),
-        dbc.Col([
-            dcc.Loading(dcc.Graph(id = 'plot-routing', style={"width": "100%", "height": "300px"})),
-        ],width = 6, align = 'center'),
-    ], align="start", style = ROW_STYLE),
+    # dbc.Row([
+    #     dbc.Col([
+    #         table_clients,
+    #         dcc.Dropdown(id="dropdown-client", style = FONT_STYLE),
+    #         ], width = 6, align = 'center'),
+    #     dbc.Col([
+    #         dcc.Loading(dcc.Graph(id = 'plot-routing', style={"width": "100%", "height": "300px"})),
+    #     ],width = 6, align = 'center'),
+    # ], align="start", style = ROW_STYLE),
 ])
