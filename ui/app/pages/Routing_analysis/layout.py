@@ -84,34 +84,23 @@ layout = html.Div([
         dbc.Col([
             filter_card,
             html.Button('Execute', id='button-execute'),
-            ],width = 5, align = 'start'),
+            ],width = 4, align = 'start'),
         #dbc.Col(width = 1),
         dbc.Col([
             #dcc.Markdown('#### Results'),
             dbc.Row([
                 #dcc.Loading(dbc.Stack([
                 dbc.Col([
-                    co2_emissions
+                    co2_emissions,
+                    dcc.Loading(dcc.Graph(id = 'plot-co2-modell-road')),
                 ], width=6, align = 'center'),
                 dbc.Col([
-                    co2_emissions_new
+                    co2_emissions_new,
+                    dcc.Loading(dcc.Graph(id = 'plot-co2-modell')),
                 ], width=6, align = 'center'),
                 #], direction = "horizontal")),
-            ], align="center"),
-            dbc.Row([
-                dcc.Loading(dcc.Graph(id = 'plot-co2-modell', 
-                                    #style={"width": "100%", "height": "600px"}
-                                    )),
-                dcc.Loading(dcc.Graph(id = 'plot-co2-modell-road', 
-                                    #style={"width": "100%", "height": "600px"}
-                                    )),
-            ]),                        
+            ], align="center"),                   
             table_co2_modell
-            ], width={"size": 6, "offset": 1}, align = 'center')
+            ], width={"size": 8, "offset": 0}, align = 'center')
     ], align="start", style = ROW_STYLE),
-    # dbc.Row([
-    #     dbc.Col(width = 3),
-    #     dbc.Col(width = 4),
-    #     dbc.Col(collapse_df, width = 5, align = 'center'),
-    # ], align="center", style = ROW_STYLE)
 ])
