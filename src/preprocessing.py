@@ -2,6 +2,7 @@ from loguru import logger
 import country_converter as coco
 import numpy as np
 import re
+import scipy.stats as stats
 
 
 def clean_string(x):
@@ -110,6 +111,24 @@ def data_preprocessing_nshift(df, dict_names: dict):
     # Get country names
     df = get_country_name(df)
     return df
+
+def outlier_removal(dummy_df, cols):
+    q1 = dummy_df[cols].quantile(0.25) # Same as np.percentile but maps (0,1) and not (0,100)
+    q3 = dummy_df[cols].quantile(0.75)
+    iqr = q3 - q1
+    upper_limit = (q3+1.5*iqr)
+    lower_limit = (q3-1.5*iqr)
+    print(upper_limit, lower_limit)
+    # Filter our dataframe based on condition
+    filtered_df = dummy_df[(dummy_df[cols] < upper_limit)&(dummy_df[cols] > lower_limit)]
+    return filtered_df
+
+
+def outlier_removal_z(col):
+    #find absolute value of z-score for each observation
+    z = np.abs(stats.zscore(col))
+    idx_non_outliers = np.where(z<3, True, False)
+    return pd.Series(idx_non_outliers, index = col.index)
 
 
 def merge_for_app(df, df_shipper, df_receiver, df_distances):

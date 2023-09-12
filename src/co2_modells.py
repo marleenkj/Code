@@ -12,6 +12,15 @@ import math
 import pandas as pd
 import time
 
+columns_df_results = [
+        "date from", "date to", "volume",
+        "co2 road", "distance road", "time road","routes road", "processing time road",
+        "co2 railroad", "distance railroad", "time railroad", "terminal allocation", "routes railroad", "processing time railroad",
+        "co2 prehaul", "co2 terminal", "co2 mainhaul", "co2 endhaul", "co2 allroad",
+        "distance prehaul", "nb lu loading", "distance mainhaul", "nb lu unloading", "distance endhaul", "distance allroad",
+        "time prehaul", "time loading", "time mainhaul", "time unloading", "time endhaul", "time allroad"
+]
+
 columns_df_results_details = [
     "Rail/road",
     "Leg",
