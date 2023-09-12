@@ -202,35 +202,3 @@ def get_distance_osrm_dc_clients(dict_points) -> float:
     json.loads(r.content)
     res = r.json()
     return res["distances"]
-
-
-"""
-def create_distance_matrix(dict_points, method):
-    start = time.time()
-    # create points format
-    list_points = list(dict_points.items())
-    if method == "haversine":
-        distance_matrix = haversine.haversine_vector(list(dict_points.values()), list(dict_points.values()), comb=True)*1000
-        end = time.time()
-        print(f"{end - start} seconds")
-        return distance_matrix.astype(int)
-    if len(list_points)>100:
-        distance_matrix = osrm_matrix(list_points)
-        end = time.time()
-        print(f"{end - start} seconds")
-        return distance_matrix.astype(int)
-    else:
-        # Create points format
-        points = str(list_points[0][1][0])+','+str(list_points[0][1][1])
-        for i in range(1, len(list_points)):
-            points = points+';'+str(list_points[i][1][0])+','+str(list_points[i][1][1])
-
-        # get distance matrix with osrm
-        url = f'http://router.project-osrm.org/table/v1/driving/{points}?annotations=distance'
-        r = requests.get(url)
-        json.loads(r.content)
-        res = r.json()
-        end = time.time()
-        print(f"{end - start} seconds")
-        return np.array(res['distances'], dtype=int)
-"""

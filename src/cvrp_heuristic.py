@@ -87,9 +87,6 @@ def evaluate_cvrp(data, solution):
         total_co2 += route_co2
     return total_co2
 
-# 2-opt local search
-# Verbesserungsheuristik
-
 
 def swap_2opt(route, i, j):
     new_route = route[:i] + route[i:j + 1][::-1] + route[j + 1:]

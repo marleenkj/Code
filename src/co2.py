@@ -223,8 +223,6 @@ def co2_train(
         number_of_trains = math.ceil(
             number_of_wagons / train.capacity_loc_cars)
 
-        # for i in range(number_of_trains):
-        # Achtung was passiert, wenn mehrere Züge
         weight_total_train_ton = train.weight_locomotive_ton + train.weight_car_ton * \
             number_of_wagons + payload_ton + number_of_containers * train.weight_container_ton
 
@@ -266,66 +264,8 @@ def co2_train(
         else:
             k = 3.15
             co2_train = p * k * (1 / train.engine_efficiency) * energy_in_kwh
-        #print("Co2 train", co2_train)
-
-        # Annahme: one wagon has one container; do we include container weight?
         co2_transshipment = 2 * k * number_of_containers * energy_per_transshipment
-        #print("Co2 transshipment", co2_transshipment)
 
         return co2_train + co2_transshipment, co2_train, co2_transshipment
 
     return mesoscopic_train(train, trip_train, k, energy_per_transshipment)
-
-
-def etw_train(train, trip, k, energy_per_transshipment):
-    payload_ton = payload_kg / 1000
-    distance_km = distance_m / 1000
-    k = 0.574  # kgco2/kwh
-    #energy_per_transshipment = 4.4
-
-    class trip_train:
-        "trip specific parameters"
-        gradient_abs = 0
-        speed_kmh = 73
-        speed_ms = (speed_kmh * 1000) / 3600
-        number_of_acc_processes_per_km = 0.2
-
-    class train:
-        "technical parameters"
-        weight_locomotive_ton = 110
-        weight_car_ton = 25
-        capacity_per_car_ton = 60
-        capacity_loc_cars = 30
-        axles_per_car = 4
-        engine_efficiency = 0.65
-        # engine_diesel_electric_efficiency =
-
-    distance_empty = 0
-    distance_loaded = distance_km
-    e = distance_empty / distance_loaded
-
-    number_of_wagons = math.ceil(payload_ton / train.capacity_per_car_ton)
-    weight_total_train_ton = train.weight_locomotive_ton + \
-        train.weight_car_ton * number_of_wagons + payload_ton
-    weight_load_per_car_ton = payload_ton / number_of_wagons
-
-    gross_weight_ton = weight_total_train_ton
-    net_weight_ton = payload_ton
-
-    specific_energy_consumption_wh_per_gross_ton_km = 1200 * \
-        pow(gross_weight_ton, -0.62) * trip_train.gradient_abs
-
-    load_factor = weight_load_per_car_ton / (train.capacity_per_car_ton)
-    capacity_utilization = load_factor / (1 + e)
-    relation_nt_gt = capacity_utilization / \
-        (capacity_utilization + (train.weight_car_ton / (train.capacity_per_car_ton)))
-
-    specific_energy_consumption_wh_per_net_ton_km = specific_energy_consumption_wh_per_gross_ton_km / relation_nt_gt
-
-    energy_in_wh = specific_energy_consumption_wh_per_net_ton_km * \
-        distance_km * net_weight_ton
-
-    if train.engine_type == "diesel":
-        energy_in_wh = energy_in_wh / train.engine_diesel_electric_efficiency
-
-    return energy_in_wh

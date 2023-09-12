@@ -360,13 +360,10 @@ def create_solution_old(df, dict_terminals, closest_dct):
     distances = distances.T
     distances['Dminidx'] = distances.idxmin(axis=1)
     distances['Dmin'] = distances.min(axis=1)
-    # print(dc)
     distances["Dminidx"] = np.where(
         distances["Dminidx"] == dc,
         closest_dct,
         distances["Dminidx"])
-    # distance has to be smaller than 150km luftlinie
-    #distances["Dminidx"] = np.where(distances["Dmin"]>150000, closest_dct, distances["Dminidx"])
     list_solution = []
     dict_solution = {}
     for i in dict_terminals.keys():

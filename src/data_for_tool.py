@@ -239,11 +239,6 @@ def data_import():
                                                                'Shipper latitude'],
                                                            how="left")
 
-    # limit to 17 tons per order
-    #df = df[df["Sender weight (kg)"]<17000]
-
-    #df = df[(df["Shipper name"]<"DC2")|(df["Shipper name"]<"DC3")]
-
     df = df.rename({"Pickup date": "Delivery date"}, axis=1)
 
     # Terminals
