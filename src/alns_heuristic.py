@@ -5,11 +5,8 @@ import numpy as np
 import sys
 sys.path.append('..')
 
-
 # %matplotlib inline
-
 #SEED = 1234
-
 
 def plot_solution(solution, name="CVRP solution"):
     """
