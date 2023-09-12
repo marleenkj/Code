@@ -36,6 +36,7 @@ def preprocessing_modelling(df, date_from, date_to, truck_capacity, volume):
     if df_new["Sender weight (kg)"].max() < truck_capacity:
         df = df_new.copy()
     logger.info(df["Sender weight (kg)"].max())
+    #df["Sender weight (kg)"] = df["Sender weight (kg)"].apply(np.ceil)
     #logger.info(df.head())
     return df, date_min, date_max
 
@@ -68,7 +69,10 @@ def co2_modell(df, df_distance_matrix, dict_terminals, date_from, date_to,
         dict_points.update(create_dict_points(df, "Receiver name", "Receiver latitude", "Receiver longitude"))
         data = create_data_model(df, df_distance_matrix, dict_points, nb_trucks, truck_capacity)
         
-        logger.info(sum(data["demands"])/truck_capacity)
+        logger.info(f'Weight total truck: {sum(data["demands"])}')
+        logger.info(f'Weight total df: {df["Sender weight (kg)"].sum()}')
+        logger.info(f'Weight total demand: {sum([0] + list(df["Sender weight (kg)"].astype(int)))}')
+
         routes_index_truck, routes_names_truck, routes_load = cvrp_ortools(data)
         #logger.info(routes_index_truck)
         co2_truck, distance_truck = evaluate_cvrp(data, routes_index_truck, details = "individually")
@@ -128,13 +132,14 @@ def co2_modell(df, df_distance_matrix, dict_terminals, date_from, date_to,
         print("Total processing time:", elapsed_time_railroad+elapsed_time_road)
         dict_results = {"date from":date_min,
                         "date to":date_max, 
+                        "weight total": df["Sender weight (kg)"].sum(), # weight in kg
                         "co2 road":co2_truck, 
                         "distance road": distance_truck, 
                         "routes road":routes_names_truck,
                         #"Auslastungsgrad trucks":(load_truck/truck_capacity)/len(routes_names_truck),
                         "processing time road": elapsed_time_road,
                         "co2 railroad": co2_railroad, 
-                        "distance railroad": distance_railroad, 
+                        "distance railroad": distance_railroad,
                         "terminal allocation": list_solution,
                         "routes railroad": routes_names_railroad,
                         #"Auslastungsgrad trucks railroad":(load_truck/truck_capacity)/len(routes_names_truck),
@@ -263,7 +268,7 @@ def co2_modell_direct(df, df_distance_matrix, dict_terminals, date_from, date_to
             list_solution, closest_dct = create_solution_150_20(df, dict_terminals, dict_points)
         logger.info(list_solution)
         terminal = f"T{list_solution.index([client])+1}"
-        
+        logger.info(terminal)
         co2_railroad, distance_railroad, co2_rail, distance_rail, co2_prehaul, distance_prehaul, co2_endhaul, distance_endhaul = evaluate_solution_direct(df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country, nb_trucks, truck_capacity)
         
         print("railroad: ", co2_railroad)
@@ -282,7 +287,7 @@ def co2_modell_direct(df, df_distance_matrix, dict_terminals, date_from, date_to
         # Results
         print("Total processing time:", elapsed_time_railroad+elapsed_time_road)
         dict_results = {"co2 road": co2_road, 
-                        "distance road": distance_road, 
+                        "distance road": distance_road/1000, 
                         "processing time road": elapsed_time_road,
                         "co2 railroad": co2_railroad, 
                         "distance railroad": distance_railroad/1000,

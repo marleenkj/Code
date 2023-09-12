@@ -31,9 +31,9 @@ df_limited = pd.read_csv(f'{project_path}/{dataset_name}.csv', parse_dates=['Del
 dataset_name = 'df_distance_matrix'
 df_distance_matrix = pd.read_csv(f'{project_path}/{dataset_name}.csv', index_col = 0)
 df_results_details = pd.read_csv(f'{project_path}/df_results_details.csv', index_col = [0])
-dataset_name = 'df_results_direct'
+dataset_name = 'df_results_direct_ftl_truck_speed_80_80'
 results_direct_ftl_truck = pd.read_csv(f'{project_path}/direct/{dataset_name}.csv')
-dataset_name = 'df_results_direct_ftl_train'
+dataset_name = 'df_results_direct_ftl_train_speed_80_80'
 results_direct_ftl_train = pd.read_csv(f'{project_path}/direct/{dataset_name}.csv')
 dataset_name = '0730_results_base_weekly'
 df_ghg = pd.read_csv(f'{project_path}/old/{dataset_name}.csv')

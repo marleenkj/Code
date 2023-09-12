@@ -56,6 +56,27 @@ co2_emissions_new = dbc.Card([
     dbc.CardBody([html.H4(id = 'output-emissions-railroad')])
 ],body=True, color = 'light')
 
+distance_road = dbc.Card([
+    dbc.CardHeader('Distance road'),
+    dbc.CardBody([html.H4(id = 'output-distance-road')])
+], body=True, color = 'light')
+
+distance_railroad = dbc.Card([
+    dbc.CardHeader('Distance railroad'),
+    dbc.CardBody([html.H4(id = 'output-distance-railroad')])
+],body=True, color = 'light')
+
+time_road = dbc.Card([
+    dbc.CardHeader('Time road'),
+    dbc.CardBody([html.H4(id = 'output-time-road')])
+], body=True, color = 'light')
+
+time_railroad = dbc.Card([
+    dbc.CardHeader('Time railroad'),
+    dbc.CardBody([html.H4(id = 'output-time-railroad')])
+],body=True, color = 'light')
+
+
 # collapse_button = dbc.Button(
 #             "More details",
 #             id="button-table-calculation",
@@ -92,10 +113,14 @@ layout = html.Div([
                 #dcc.Loading(dbc.Stack([
                 dbc.Col([
                     co2_emissions,
+                    distance_road,
+                    time_road,
                     dcc.Loading(dcc.Graph(id = 'plot-co2-modell-road')),
                 ], width=6, align = 'center'),
                 dbc.Col([
                     co2_emissions_new,
+                    distance_railroad,
+                    time_railroad,
                     dcc.Loading(dcc.Graph(id = 'plot-co2-modell')),
                 ], width=6, align = 'center'),
                 #], direction = "horizontal")),

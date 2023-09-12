@@ -141,6 +141,32 @@ def create_table_total(df, name):
     df_new = pd.DataFrame({name: [total_co2_road, total_co2_rail, difference_absolute, difference_relative]})
     return df_new
 
+def create_table_total_distance(df, name):
+    """
+    returns distance in km
+    """
+    total_co2_road = df["distance road"].sum()
+    print(name, ": ", total_co2_road/365)
+    total_co2_rail = df["distance railroad"].sum()
+    print(name, ": ", total_co2_rail/365)
+    difference_absolute = total_co2_road - total_co2_rail
+    difference_relative = (1-(total_co2_rail / total_co2_road))
+    df_new = pd.DataFrame({name: [total_co2_road, total_co2_rail, difference_absolute, difference_relative]})
+    return df_new
+
+def create_table_total_time(df, name):
+    """
+    returns distance in km
+    """
+    total_co2_road = df["time road"].sum()
+    print(name, ": ", total_co2_road/365)
+    total_co2_rail = df["time railroad"].sum()
+    print(name, ": ", total_co2_rail/365)
+    difference_absolute = total_co2_road - total_co2_rail
+    difference_relative = (1-(total_co2_rail / total_co2_road))
+    df_new = pd.DataFrame({name: [total_co2_road, total_co2_rail, difference_absolute, difference_relative]})
+    return df_new
+
 def data_cleaning_and_prep(df, dict_terminals):
     clients_to_remove = ["C840", "C986", "C808", "C11702"]
     df = df[~df["Receiver name"].isin(clients_to_remove)]
@@ -196,3 +222,30 @@ def data_for_tool():
     df, df_terminal, dict_terminals = data_import()
     df_dc2, df_dc3, df_distance_matrix = data_cleaning_and_prep(df, dict_terminals)
     return df_dc2, df_dc3, df_distance_matrix, dict_terminals, df_terminal
+
+def add_distance_and_time(dict_results, df_results_details):
+    speed_train = 73
+    speed_truck = 83
+    loading_terminal = 15/60 #15minutes per LU
+    unloading_terminal = 10/60 #10minutes per LU
+    # Distance allroad
+    dict_results["distance allroad"] = df_results_details[df_results_details["Rail/road"]=="Road"]["Distance"].sum()
+    # Distance prehaul
+    dict_results["distance prehaul"] = df_results_details[df_results_details["Rail/road"]=="Prehaul"]["Distance"].sum()
+    # Distance endhaul
+    dict_results["distance endhaul"] = df_results_details[df_results_details["Rail/road"]=="Endhaul"]["Distance"].sum()
+    # Distance mainhaul
+    dict_results["distance mainhaul"] = df_results_details[df_results_details["Rail/road"]=="Mainhaul"]["Distance"].sum()
+    # Number of loading at terminal
+    dict_results["nb lu loading"] = df_results_details[df_results_details["Rail/road"]=="Prehaul"].shape[0]
+    # Number of loading at terminal
+    dict_results["nb lu unloading"] = df_results_details[df_results_details["Rail/road"]=="Endhaul"].shape[0]
+    dict_results["time road"] = dict_results["distance road"]/1000/speed_truck
+    dict_results["time allroad"] = dict_results["distance allroad"]/1000/speed_truck
+    dict_results["time prehaul"] = dict_results["distance prehaul"]/1000/speed_truck
+    dict_results["time endhaul"] = dict_results["distance endhaul"]/1000/speed_truck
+    dict_results["time mainhaul"] = dict_results["distance mainhaul"]/1000/speed_train
+    dict_results["time loading"] = dict_results["nb lu loading"]*loading_terminal
+    dict_results["time unloading"] = dict_results["nb lu unloading"]*unloading_terminal
+    dict_results["time railroad"] = dict_results["time allroad"]+dict_results["time prehaul"]+dict_results["time endhaul"]+dict_results["time mainhaul"]+dict_results["time loading"]+dict_results["time unloading"]
+    return dict_results

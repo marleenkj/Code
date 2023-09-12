@@ -73,19 +73,19 @@ def evaluate_rail_for_solution_i(
         total_demand, distance_arc, weights_container, power, country, container_size = "20")
 
     new_record = pd.DataFrame(
-        [['Railroad', f"{terminal} Rail", f"{closest_dct}-{terminal}", 
+        [['Mainhaul', f"{terminal} Rail", f"{closest_dct}-{terminal}", 
           total_weight, distance_arc, emissions_haul]],
         columns=df_results.columns)
     df_results = pd.concat([df_results, new_record], ignore_index=True)
     new_record = pd.DataFrame(
-        [['Railroad', f"{terminal} Load & Unload", f"{closest_dct}-{terminal}", 
+        [['Terminal', f"{terminal} Load & Unload", f"{closest_dct}-{terminal}", 
           nb_container, distance_arc, emission_trans]],
         columns=df_results.columns)
     df_results = pd.concat([df_results, new_record], ignore_index=True)
     return emissions_total, distance_arc, df_results
 
 def cvrp_routing(df, df_distance_matrix, dict_points, nb_trucks, truck_capacity):
-    data_t = create_data_model(df_t, df_distance_matrix, dict_points, nb_trucks, truck_capacity)
+    data_t = create_data_model(df, df_distance_matrix, dict_points, nb_trucks, truck_capacity)
     routes_index, routes_names, routes_load = cvrp_ortools(data_t)
     co2_endhaul, distance_endhaul = evaluate_cvrp(data_t, routes_index)
     return co2_endhaul, distance_endhaul, routes_names, routes_load
@@ -124,7 +124,7 @@ def evaluate_road(df, list_solution, dict_terminals, closest_dct, df_distance_ma
                         if routes_names[i][j] != routes_names[i][j-1]:
                             route_string = route_string+"-"+routes_names[i][j]
                     new_record = pd.DataFrame(
-                        [['Railroad', f"{terminal} Endhaul Container {i+1}", 
+                        [['Endhaul', f"{terminal} Endhaul Container {i+1}", 
                           route_string, routes_load[i], distance_endhaul[i], co2_endhaul[i]]],
                         columns=columns_df_results_details)
                     df_results = pd.concat([df_results, new_record], ignore_index=True)
@@ -140,7 +140,7 @@ def evaluate_road(df, list_solution, dict_terminals, closest_dct, df_distance_ma
                     co2_dc_closest_dct = co2_truck(container_load, distance_dc_closest_dct)
                     
                     new_record = pd.DataFrame(
-                        [['Railroad', f"{terminal} Prehaul Container {i+1}", f"{dc}-{closest_dct}", 
+                        [['Prehaul', f"{terminal} Prehaul Container {i+1}", f"{dc}-{closest_dct}", 
                           container_load, distance_dc_closest_dct, co2_dc_closest_dct]],
                         columns=df_results.columns)
                     df_results = pd.concat([df_results, new_record], ignore_index=True)

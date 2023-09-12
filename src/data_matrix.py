@@ -104,6 +104,7 @@ def create_distance_matrix(dict_points):
 
 def create_data_model(df, df_distance_matrix, dict_points, num_vehicles = 20, capacity = 13810):
     """Stores the data for the problem."""
+    df["Sender weight (kg)"] = df["Sender weight (kg)"].apply(np.ceil)
     data = {}
     data['customers'] = [list(dict_points.keys())[0]]+list(df["Receiver name"])
     data['distance_matrix'] = np.ceil(np.array(df_distance_matrix[data['customers']].loc[data['customers']])).astype(int)

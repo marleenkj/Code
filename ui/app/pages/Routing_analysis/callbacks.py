@@ -19,6 +19,7 @@ from src.co2_modells import co2_modell
 from src.plots import graph_solution, graph_road
 from src.create_solution import create_solution_150_20, create_solution
 from src.data_matrix import df_distance_matrix_haversine, create_dict_points, create_data_model
+from src.data_for_tool import add_distance_and_time
 
 df = df_limited.copy()
 print(df.columns)
@@ -126,6 +127,10 @@ def clients_input(shipper, terminal, start_date, end_date):
 @app.callback(
     Output('output-emissions-road', "children"),
     Output('output-emissions-railroad', "children"),
+    Output('output-distance-road', "children"),
+    Output('output-distance-railroad', "children"),
+    Output('output-time-road', "children"),
+    Output('output-time-railroad', "children"),
     Output('plot-co2-modell', "figure"),
     Output('plot-co2-modell-road', "figure"),
     Output('table-co2-modell', "data"),
@@ -168,13 +173,18 @@ def execute_co2_modell(n_clicks, shipper, terminal, clients, start_date, end_dat
         logger.info(df.shape[0])
         dict_results_new, df_results_details_new = co2_modell(df, df_distance_matrix, dict_term, start_date, end_date, mode = "intermodal")
         logger.info(dict_results_new)
+        dict_results_new = add_distance_and_time(dict_results_new, df_results_details_new)
         df_results_details_new = df_results_details_new[df_results_details_new["Rail/road"]!="Unimodal road"]
         output_emissions_road = f'{dict_results_new["co2 road"]:.0f} kg CO2 eq'
         output_emissions_railroad = f'{dict_results_new["co2 railroad"]:.0f} kg CO2 eq'
+        output_distance_road = f'{dict_results_new["distance road"]/1000:,.0f} km'
+        output_distance_railroad = f'{dict_results_new["distance railroad"]/1000:,.0f} km'
+        output_time_road = f'{dict_results_new["time road"]:,.4f} h'
+        output_time_railroad = f'{dict_results_new["time railroad"]:,.4f} h'
         closest_dct = df_distance_matrix[shipper].loc[dict_term.keys()].idxmin()
         fig_rail = graph_solution(df, dict_results_new["routes railroad"], dict_results_new["terminal allocation"], dict_term, closest_dct)
         fig_road = graph_road(df, dict_results_new["routes road"])
-        return output_emissions_road, output_emissions_railroad, fig_rail, fig_road, df_results_details_new.to_dict('records')
+        return output_emissions_road, output_emissions_railroad, output_distance_road, output_distance_railroad, output_time_road, output_time_railroad, fig_rail, fig_road, df_results_details_new.to_dict('records')
     
 @app.callback(
     Output("collapse", "is_open"),

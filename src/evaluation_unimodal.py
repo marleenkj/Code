@@ -26,6 +26,7 @@ def evaluate_route(data, route):
     """
     calculates distance and co2 of complete route dc->client->dc
     takes input: route as list and data matrix
+    returns co2 in kgco2, distance in meters, and routeload in kg
     """
     route = [0] + route + [0]
     #print(route)

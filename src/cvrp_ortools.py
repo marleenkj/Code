@@ -46,7 +46,7 @@ def cvrp_ortools(data):
 
     # Define cost of each arc.
     routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
-    
+
     """
     # Add costs for each vehicle used using emission costs
     penalty = 100000000000
@@ -69,6 +69,17 @@ def cvrp_ortools(data):
         data['vehicle_capacities'],  # vehicle maximum capacities
         True,  # start cumul to zero
         'Capacity')
+
+    # # Add Distance constraint.
+    # dimension_name = 'Distance'
+    # routing.AddDimension(
+    #     transit_callback_index,
+    #     0,  # no slack
+    #     3000000,  # vehicle maximum travel distance
+    #     True,  # start cumul to zero
+    #     dimension_name)
+    # distance_dimension = routing.GetDimensionOrDie(dimension_name)
+    # distance_dimension.SetGlobalSpanCostCoefficient(100)
 
     # Setting first solution heuristic.
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()

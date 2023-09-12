@@ -1,5 +1,0 @@
-aiofiles
-fastapi
-pydantic
-uvicorn
-python-multipart

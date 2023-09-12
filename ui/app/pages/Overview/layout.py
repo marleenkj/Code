@@ -11,7 +11,7 @@ layout = html.Div([
     dcc.Store(id ="store"),
     dbc.Row([dcc.Markdown(
     '''
-    #### Overview over results
+    #### Overview
     '''
     )]),
     # Dropdown Menu for DC and Pickup Date

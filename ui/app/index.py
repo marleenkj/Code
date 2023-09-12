@@ -17,12 +17,16 @@ CONTENT_STYLE = {
 }
 
 TOPBAR_STYLE = {
-    "padding": "1rem 1rem"
+    "padding": "1rem 1rem",
+    "font-size": 16,
+    "font-weight": "bold",
 }
 
 NAVLINK_STYLE = {
     "margin-left": "2rem",
-    "color": "#F60000"
+    "color": "#F0182D",
+    #"font-size": 18,
+    #"font-weight": 900,
 }
 
 encoded_logo = base64.b64encode(open('assets/Logo_TU.png', 'rb').read())

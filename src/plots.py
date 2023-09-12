@@ -20,13 +20,13 @@ color = sns.color_palette().as_hex()
 import plotly.io as pio
 pio.templates["my_modification"] = go.layout.Template(
     layout=dict(
-        font={"size": 13, "family": "arial"},
+        font={"size": 15, "family": "arial"},
         #colorway = ["#57B38E", "#50A382", "#468B6F", "#3B705A", "#305847", "#2B4C3E"],
-        #colorway = [px.colors.sequential.Greys[i] for i in [4]],
-        colorway = ["#626469"],
+        colorway = [px.colors.sequential.Greys[i] for i in [2,3,4,5]],
+        #colorway = ["#626469"],
         mapbox_style="carto-positron",
-        xaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"}),
-        yaxis = dict(tickfont = {"size": 13, "family": "arial"}, titlefont = {"size": 12, "family": "arial"})
+        xaxis = dict(tickfont = {"size": 15, "family": "arial"}, titlefont = {"size": 15, "family": "arial"}),
+        yaxis = dict(tickfont = {"size": 15, "family": "arial"}, titlefont = {"size": 15, "family": "arial"})
     )
 )
 template = "plotly_white+my_modification"
@@ -38,7 +38,6 @@ legend_layout = dict(
         y=0.99,
         xanchor="right",
         x=0.99,
-    
 )
 
 def graph_solution_direct(x, dict_points, dict_terminals, df_distance_matrix, path_plot = False):
@@ -466,3 +465,4 @@ def show_clients_per_dc_and_both(df, path_plot = False):
         return fig
     else:
         fig.write_html(path_plot, auto_open = False)
+

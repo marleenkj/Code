@@ -103,6 +103,7 @@ def create_solution(df, dict_terminals, dict_points):
     distances["Dmin"] = np.where((distances["Dmin"] > 150000)&(distances["Dmin"] > distances["Travel distance"]*0.2), 
                                  closest_dct_distance, distances["Dmin"])
     print(distances[distances["Dminidx"]==closest_dct].shape)
+    #return distances
     
     # Create list solution
     distances = distances.drop(dc)
