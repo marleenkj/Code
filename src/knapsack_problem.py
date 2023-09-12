@@ -1,15 +1,19 @@
+from ortools.linear_solver import pywraplp
 import sys
 sys.path.append('..')
-from ortools.linear_solver import pywraplp
+
 
 def knapsack(list_customers, list_weights, bin_capacity):
+    """
+    
+    """
     # Create the mip solver with the SCIP backend.
     data = {}
     data['weights'] = list_weights
-    data['items'] = list(range(len(data['weights'] )))
+    data['items'] = list(range(len(data['weights'])))
     data['bins'] = data['items']
     data['bin_capacity'] = bin_capacity
-    
+
     solver = pywraplp.Solver.CreateSolver('SCIP')
 
     if not solver:
@@ -34,9 +38,8 @@ def knapsack(list_customers, list_weights, bin_capacity):
 
     # The amount packed in each bin cannot exceed its capacity.
     for j in data['bins']:
-        solver.Add(
-            sum(x[(i, j)] * data['weights'][i] for i in data['items']) <= y[j] *
-            data['bin_capacity'])
+        solver.Add(sum(x[(i, j)] * data['weights'][i]
+                       for i in data['items']) <= y[j] * data['bin_capacity'])
 
     # Objective: minimize the number of bins used.
     solver.Minimize(solver.Sum([y[j] for j in data['bins']]))
@@ -63,7 +66,8 @@ def knapsack(list_customers, list_weights, bin_capacity):
                     solution.append(bin_items)
         clients_per_truck = []
         for i in range(len(solution)):
-            clients_per_truck.append([{v: k for v, k in enumerate(list_customers)}.get(a) for a in solution[i]])
+            clients_per_truck.append(
+                [{v: k for v, k in enumerate(list_customers)}.get(a) for a in solution[i]])
         print()
         print('Number of bins used:', num_bins)
         print('Time = ', solver.WallTime(), ' milliseconds')

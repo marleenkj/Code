@@ -9,43 +9,43 @@ COLOR_SE = {"color": "#36C746"}
 # defintion of components for layout
 table_clients = dash_table.DataTable(
     id='table-clients-truck',
-    page_current= 0,
-    page_size= 10,
+    page_current=0,
+    page_size=10,
 )
 
 ftl_truck = dbc.Card([
     dbc.CardBody([
         dcc.Markdown('#### Full truck load'),
         dcc.Loading(dcc.Graph(
-            id = 'plot-pie-truck', 
+            id='plot-pie-truck',
             #style={"width": "100%", "height": "400px"}
-            )),
+        )),
         dcc.Loading(dcc.Graph(
-            id = 'plot-boxplot-truck', 
+            id='plot-boxplot-truck',
             style={"width": "100%", "height": "300px"}
-            ))
+        ))
     ])
-], body=True, color = 'light')
+], body=True, color='light')
 
 ftl_train = dbc.Card([
     dbc.CardBody([
         dcc.Markdown('#### Full train load'),
-                dcc.Loading(dcc.Graph(
-            id = 'plot-pie-train', 
-            #style={"width": "100%", "height": "400px"}
-            )),
         dcc.Loading(dcc.Graph(
-            id = 'plot-boxplot-train', 
+            id='plot-pie-train',
+                    #style={"width": "100%", "height": "400px"}
+                    )),
+        dcc.Loading(dcc.Graph(
+            id='plot-boxplot-train',
             style={"width": "100%", "height": "300px"}
-            ))
+        ))
     ])
-], body=True, color = 'light')
+], body=True, color='light')
 
 
-## layout body
+# layout body
 layout = html.Div([
     dbc.Row([dcc.Markdown(
-    '''
+        '''
     #### Individual client analysis for direct delivery
     '''
     )]),
@@ -53,11 +53,11 @@ layout = html.Div([
     dbc.Row([
         dbc.Col([
             ftl_truck
-            ],width = 6, align = 'center'),
+        ], width=6, align='center'),
         dbc.Col([
             ftl_train
-            ],width = 6, align = 'center'),
-    ], align="center", style = ROW_STYLE),
+        ], width=6, align='center'),
+    ], align="center", style=ROW_STYLE),
     # dbc.Row([
     #     dbc.Col([
     #         table_clients,

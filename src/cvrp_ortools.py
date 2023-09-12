@@ -2,6 +2,7 @@ from loguru import logger
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 
+
 def get_solution(data, manager, routing, solution):
     """Evaluate solution on console."""
     #print(f'Objective: {solution.ObjectiveValue()}')
@@ -21,6 +22,7 @@ def get_solution(data, manager, routing, solution):
         routes[vehicle_id] = nodes
         routes_load.append(route_load)
     return routes
+
 
 def cvrp_ortools(data):
     """Solve the CVRP problem."""
@@ -50,7 +52,7 @@ def cvrp_ortools(data):
     for vehicle_id in range(num_vehicles):
         routing.SetFixedCostOfVehicle(penalty, vehicle_id)
     """
-    
+
     # Add Capacity constraint.
     def demand_callback(from_index):
         """Returns the demand of the node."""
@@ -93,14 +95,17 @@ def cvrp_ortools(data):
     # Return solution.
     if solution:
         dict_nodes_index = get_solution(data, manager, routing, solution)
-        dict_nodes_index = dict((k, v) for k, v in dict_nodes_index.items() if len(v) > 2)
+        dict_nodes_index = dict(
+            (k, v) for k, v in dict_nodes_index.items() if len(v) > 2)
         dict_nodes_names = {}
         routes_load = []
         for i in dict_nodes_index.keys():
-            dict_nodes_names[i] = [{v: k for v, k in enumerate(data["customers"])}.get(a) for a in dict_nodes_index[i]]
+            dict_nodes_names[i] = [{v: k for v, k in enumerate(
+                data["customers"])}.get(a) for a in dict_nodes_index[i]]
             loads_in_route = [data["demands"][i] for i in dict_nodes_index[i]]
             routes_load.append(sum(loads_in_route))
-        return list(dict_nodes_index.values()), list(dict_nodes_names.values()), routes_load
+        return list(dict_nodes_index.values()), list(
+            dict_nodes_names.values()), routes_load
     else:
         logger.info(solution)
         logger.info("No solution was found")

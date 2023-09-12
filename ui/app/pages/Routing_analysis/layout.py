@@ -9,13 +9,13 @@ COLOR_SE = {"color": "#36C746"}
 
 # defintion of components for layout
 date_picker_range = dcc.DatePickerRange(
-                id='date-picker-range',
-                min_date_allowed=date(2022, 1, 1),
-                max_date_allowed=date(2022, 12, 31),
-                initial_visible_month=date(2022, 1, 3),
-                start_date=date(2022, 1, 3),
-                end_date=date(2022, 1, 4)
-            )
+    id='date-picker-range',
+    min_date_allowed=date(2022, 1, 1),
+    max_date_allowed=date(2022, 12, 31),
+    initial_visible_month=date(2022, 1, 3),
+    start_date=date(2022, 1, 3),
+    end_date=date(2022, 1, 4)
+)
 
 filter_card = dbc.Card([
     # DC filter
@@ -26,55 +26,55 @@ filter_card = dbc.Card([
             dbc.Label("Select a planning period: "),
             date_picker_range
         ]),
-        #html.Div(id='output-container-date-picker-range'),
+        # html.Div(id='output-container-date-picker-range'),
         # DC filter
         html.Div([
             dbc.Label("Select a distribution center: "),
-            dcc.Dropdown(id="dropdown-shipper", style = FONT_STYLE),
+            dcc.Dropdown(id="dropdown-shipper", style=FONT_STYLE),
             html.Div(id='output-closest-dct'),
         ]),
         # Terminal filter
         html.Div([
             dbc.Label("Select terminals: "),
-            dcc.Dropdown(id="dropdown-terminal", multi = True, style = FONT_STYLE)
+            dcc.Dropdown(id="dropdown-terminal", multi=True, style=FONT_STYLE)
         ]),
         # Clients filter
         html.Div([
             dbc.Label("Select clients: "),
-            dcc.Dropdown(id="dropdown-clients", multi = True, style = FONT_STYLE)
+            dcc.Dropdown(id="dropdown-clients", multi=True, style=FONT_STYLE)
         ])
     ], gap=3)
 ], body=True)
 
 co2_emissions = dbc.Card([
     dbc.CardHeader('GHG Emissions road'),
-    dbc.CardBody([html.H4(id = 'output-emissions-road')])
-], body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-emissions-road')])
+], body=True, color='light')
 
 co2_emissions_new = dbc.Card([
     dbc.CardHeader('GHG Emissions railroad'),
-    dbc.CardBody([html.H4(id = 'output-emissions-railroad')])
-],body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-emissions-railroad')])
+], body=True, color='light')
 
 distance_road = dbc.Card([
     dbc.CardHeader('Distance road'),
-    dbc.CardBody([html.H4(id = 'output-distance-road')])
-], body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-distance-road')])
+], body=True, color='light')
 
 distance_railroad = dbc.Card([
     dbc.CardHeader('Distance railroad'),
-    dbc.CardBody([html.H4(id = 'output-distance-railroad')])
-],body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-distance-railroad')])
+], body=True, color='light')
 
 time_road = dbc.Card([
     dbc.CardHeader('Time road'),
-    dbc.CardBody([html.H4(id = 'output-time-road')])
-], body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-time-road')])
+], body=True, color='light')
 
 time_railroad = dbc.Card([
     dbc.CardHeader('Time railroad'),
-    dbc.CardBody([html.H4(id = 'output-time-railroad')])
-],body=True, color = 'light')
+    dbc.CardBody([html.H4(id='output-time-railroad')])
+], body=True, color='light')
 
 
 # collapse_button = dbc.Button(
@@ -93,10 +93,10 @@ time_railroad = dbc.Card([
 
 table_co2_modell = dash_table.DataTable(id='table-co2-modell')
 
-## layout body
+# layout body
 layout = html.Div([
     dbc.Row([dcc.Markdown(
-    '''
+        '''
     #### Sustainable Assessment of Combined Railroad Freight Transportation
     '''
     )]),
@@ -105,27 +105,27 @@ layout = html.Div([
         dbc.Col([
             filter_card,
             html.Button('Execute', id='button-execute'),
-            ],width = 4, align = 'start'),
+        ], width=4, align='start'),
         #dbc.Col(width = 1),
         dbc.Col([
-            #dcc.Markdown('#### Results'),
+            # dcc.Markdown('#### Results'),
             dbc.Row([
-                #dcc.Loading(dbc.Stack([
+                # dcc.Loading(dbc.Stack([
                 dbc.Col([
                     co2_emissions,
                     distance_road,
                     time_road,
-                    dcc.Loading(dcc.Graph(id = 'plot-co2-modell-road')),
-                ], width=6, align = 'center'),
+                    dcc.Loading(dcc.Graph(id='plot-co2-modell-road')),
+                ], width=6, align='center'),
                 dbc.Col([
                     co2_emissions_new,
                     distance_railroad,
                     time_railroad,
-                    dcc.Loading(dcc.Graph(id = 'plot-co2-modell')),
-                ], width=6, align = 'center'),
-                #], direction = "horizontal")),
-            ], align="center"),                   
+                    dcc.Loading(dcc.Graph(id='plot-co2-modell')),
+                ], width=6, align='center'),
+                # ], direction = "horizontal")),
+            ], align="center"),
             table_co2_modell
-            ], width={"size": 8, "offset": 0}, align = 'center')
-    ], align="start", style = ROW_STYLE),
+        ], width={"size": 8, "offset": 0}, align='center')
+    ], align="start", style=ROW_STYLE),
 ])

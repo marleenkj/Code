@@ -1,16 +1,15 @@
-from dash import dcc, dash_table, html
+from dash import dcc, html
 import dash_bootstrap_components as dbc
-from dash import dash_table
 
 ROW_STYLE = {"padding": "1rem 1rem"}
 FONT_STYLE = {"font-family": "inherit"}
 COLOR_SE = {"color": "#36C746"}
 
-## layout body
+# layout body
 layout = html.Div([
-    dcc.Store(id ="store"),
+    dcc.Store(id="store"),
     dbc.Row([dcc.Markdown(
-    '''
+        '''
     #### Overview
     '''
     )]),
@@ -27,5 +26,5 @@ layout = html.Div([
             active_tab="location",
         ),
         html.Div(id="tab-content", className="p-4"),
-    ], align="start", style = ROW_STYLE),
+    ], align="start", style=ROW_STYLE),
 ])

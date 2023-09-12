@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 from src.distance import get_haversine_distance_latlon
 from src.evaluation_multi import evaluate_solution_multi
 from src.evaluation_railroad import evaluate_solution, evaluate_solution_direct, evaluate_solution_drop
@@ -7,13 +9,8 @@ from src.cvrp_ortools import cvrp_ortools
 from src.data_matrix import create_data_model, create_dict_points
 from loguru import logger
 import math
-import sys
 import pandas as pd
 import time
-
-
-sys.path.append('..')
-
 
 columns_df_results_details = [
     "Rail/road",
@@ -180,90 +177,7 @@ def co2_modell(df, df_distance_matrix, dict_terminals, date_from, date_to,
                         # "Auslastungsgrad trucks railroad":(load_truck/truck_capacity)/len(routes_names_truck),
                         "processing time railroad": elapsed_time_railroad}
         return dict_results, df_results
-
-
-def co2_evaluation(
-        df,
-        df_distance_matrix,
-        dict_terminals,
-        date_from,
-        date_to,
-        algorithm="base",
-        volume=1,
-        power="electric",
-        country="france",
-        truck_capacity=13810,
-        nb_trucks=40):
-    """
-    input list solution, output co2 railroad
-    """
-    t1 = time.process_time()
-
-    # Railroad
-    closest_dct = get_closest_dct(df, dict_terminals)
-
-    if algorithm == "base":
-        co2_railroad, distance_railroad, dict_routes = evaluate_solution(
-            df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country)
-
-    elapsed_time_railroad = time.process_time() - t1
-    dict_results = {"date from": df["Delivery date"].min(),
-                    "date to": df["Delivery date"].max(),
-                    "co2": co2_railroad,
-                    "distance": distance_railroad,
-                    "terminal allocation": list_solution,
-                    "routes railroad": dict_routes,
-                    # "Auslastungsgrad trucks railroad":(load_truck/truck_capacity)/len(routes_names_truck),
-                    "processing time": elapsed_time_railroad}
-    return dict_results
-
-
-def co2_rail(df, df_distance_matrix, dict_terminals, date_from, date_to,
-             algorithm="base", volume=1, power="electric", country="france",
-             truck_capacity=13810, nb_trucks=40, mode="combined"):
-    """
-    only rail algorithm, input dataframe output co2 railroad
-    """
-    df = preprocessing_modelling(
-        df, date_from, date_to, truck_capacity, volume)
-    if df.shape[0] == 0:
-        print(f"No deliveries from {date_from} to {date_to}")
-        return None
-    else:
-        # 2. Combined Railroad
-        t1 = time.process_time()
-        if mode == "combined":
-            list_solution, closest_dct = create_solution(
-                df, dict_terminals, dict_points)
-        else:
-            # For intermodal transport
-            list_solution, closest_dct = create_solution_150_20(
-                df, dict_terminals, dict_points)
-
-        if algorithm == "base":
-            co2_railroad, distance_railroad, dict_routes = evaluate_solution(
-                df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country, nb_trucks, truck_capacity)
-        elif algorithm == "drop":
-            co2_railroad, distance_railroad, dict_routes, list_solution = evaluate_solution_drop(
-                df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country, nb_trucks, truck_capacity)
-        else:
-            co2_railroad, distance_railroad, dict_routes = evaluate_solution_direct(
-                df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country, nb_trucks, truck_capacity)
-
-        print("railroad: ", co2_railroad)
-        elapsed_time_railroad = time.process_time() - t1
-
-        elapsed_time = time.process_time() - t1
-        dict_results = {
-            "date from": df["Delivery date"].min(),
-            "date to": df["Delivery date"].max(),
-            "co2": co2_railroad,
-            "distance": distance_railroad,
-            "processing time": elapsed_time_railroad,
-            "df shape": df.shape[0]
-        }
-        return dict_results
-
+    
 
 def co2_modell_direct(
         df,
@@ -389,3 +303,38 @@ def co2_modell_direct(
                 dict_points[client]),
             "Recommendation": recommendation}
         return dict_results
+
+def co2_evaluation(
+        df,
+        df_distance_matrix,
+        dict_terminals,
+        date_from,
+        date_to,
+        algorithm="base",
+        volume=1,
+        power="electric",
+        country="france",
+        truck_capacity=13810,
+        nb_trucks=40):
+    """
+    input list solution, output co2 railroad
+    """
+    t1 = time.process_time()
+
+    # Railroad
+    closest_dct = get_closest_dct(df, dict_terminals)
+
+    if algorithm == "base":
+        co2_railroad, distance_railroad, dict_routes = evaluate_solution(
+            df, list_solution, dict_terminals, closest_dct, df_distance_matrix, power, country)
+
+    elapsed_time_railroad = time.process_time() - t1
+    dict_results = {"date from": df["Delivery date"].min(),
+                    "date to": df["Delivery date"].max(),
+                    "co2": co2_railroad,
+                    "distance": distance_railroad,
+                    "terminal allocation": list_solution,
+                    "routes railroad": dict_routes,
+                    # "Auslastungsgrad trucks railroad":(load_truck/truck_capacity)/len(routes_names_truck),
+                    "processing time": elapsed_time_railroad}
+    return dict_results
