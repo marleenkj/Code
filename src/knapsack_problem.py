@@ -1,14 +1,6 @@
-from loguru import logger
-import numpy as np
-import math
-import haversine
 import sys
 sys.path.append('..')
-from src.co2 import co2_truck
-
 from ortools.linear_solver import pywraplp
-from ortools.sat.python import cp_model
-
 
 def knapsack(list_customers, list_weights, bin_capacity):
     # Create the mip solver with the SCIP backend.

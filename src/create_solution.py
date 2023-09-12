@@ -1,18 +1,11 @@
-from loguru import logger
 import numpy as np
-import math
-import haversine
 import sys
 import pandas as pd
-from math import radians, cos, sin, asin, sqrt, atan2, sqrt, degrees, modf
+from math import radians, cos, sin, asin, sqrt, sqrt
 import json
-import time
 import requests
-import itertools
 sys.path.append('..')
-from src.data_matrix import df_distance_matrix_haversine, create_dict_points, create_data_model
-from src.cvrp_ortools import cvrp_ortools
-from src.evaluation_unimodal import evaluate_cvrp
+from src.data_matrix import df_distance_matrix_haversine, create_dict_points
 
 try:
     df_individual_solution = pd.read_csv("../notebooks/results/direct/df_results_direct.csv")

@@ -1,18 +1,9 @@
-from loguru import logger
-import numpy as np
-import math
 import datetime, calendar
 from datetime import date, timedelta
-import haversine
 import sys
 import pandas as pd
-from math import radians, cos, sin, asin, sqrt, atan2, sqrt, degrees, modf
-import json
-import time
-import requests
-import itertools
 sys.path.append('..')
-from src.data_matrix import create_data_model, create_dict_points, create_df_distance_matrix
+from src.data_matrix import create_dict_points, create_df_distance_matrix
 
 def all_mondays(year):
     mondays = []

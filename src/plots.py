@@ -1,15 +1,12 @@
 import seaborn as sns
 from src.distance import get_waypoints_osrm
-from src.data_matrix import create_data_model, create_distance_matrix, create_dict_points, create_df_distance_matrix
+from src.data_matrix import create_dict_points
 import shapely.geometry
 import pandas as pd
 import geopandas as gpd
-import requests
-import io
 from loguru import logger
 import json
 import plotly.express as px
-import random
 import plotly.graph_objects as go
 import itertools
 import sys

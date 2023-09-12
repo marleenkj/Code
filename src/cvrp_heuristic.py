@@ -1,7 +1,3 @@
-from loguru import logger
-import numpy as np
-import math
-import haversine
 import sys
 sys.path.append('..')
 from src.co2 import co2_truck

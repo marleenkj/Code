@@ -1,17 +1,9 @@
-from loguru import logger
-import numpy as np
-import math
-import haversine
 import sys
 import pandas as pd
-from math import radians, cos, sin, asin, sqrt, atan2, sqrt, degrees, modf
-import json
-import requests
 sys.path.append('..')
 from src.co2 import co2_truck, co2_train
 from src.data_matrix import create_data_model, create_dict_points
 from src.cvrp_ortools import cvrp_ortools
-from src.distance import get_distance_osrm_lat_lon_meters
 from src.evaluation_unimodal import evaluate_cvrp
 
 def evaluate_all_road(df, list_solution, df_distance_matrix, nb_trucks, truck_capacity):

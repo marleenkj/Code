@@ -1,22 +1,12 @@
 from loguru import logger
-import numpy as np
 import math
-import haversine
 import sys
 import pandas as pd
-from math import radians, cos, sin, asin, sqrt, atan2, sqrt, degrees, modf
-import json
-import time
-import requests
-import itertools
 sys.path.append('..')
 from src.co2 import co2_truck, co2_train
-from src.data_matrix import create_data_model, create_dict_points, create_df_distance_matrix, create_df_distance_matrix_dict_points
+from src.data_matrix import create_data_model, create_dict_points
 from src.cvrp_ortools import cvrp_ortools
-from src.distance import get_distance_osrm_lat_lon_meters
 from src.evaluation_unimodal import evaluate_cvrp
-from src.evaluation_drop_combined import evaluate_solution_drop
-from src.knapsack_problem import knapsack
 
 columns_df_results_details = ["Rail/road", "Leg", "Route", "Payload", "Distance", "GHG Emissions"]
 

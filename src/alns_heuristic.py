@@ -1,32 +1,15 @@
-from loguru import logger
+import matplotlib.pyplot as plt
+import matplotlib
+import plotly.graph_objects as go
 import numpy as np
-import math
-import haversine
 import sys
 sys.path.append('..')
-from src.co2 import co2_truck
 
-import copy
-from types import SimpleNamespace
 
-import plotly.graph_objects as go
-import requests
-import plotly.express as px
-
-import vrplib
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import numpy.random as rnd
-
-from alns import ALNS
-from alns.accept import RecordToRecordTravel
-from alns.select import RouletteWheel
-from alns.stop import MaxRuntime
-
-#%matplotlib inline
+# %matplotlib inline
 
 #SEED = 1234
+
 
 def plot_solution(solution, name="CVRP solution"):
     """
@@ -42,39 +25,51 @@ def plot_solution(solution, name="CVRP solution"):
             color=cmap[idx],
             marker='.'
         )
-        
+
     # Plot the depot
     kwargs = dict(label="Depot", zorder=3, marker="*", s=750)
-    ax.scatter(*data["node_coord"][0], c="tab:red", **kwargs) 
+    ax.scatter(*data["node_coord"][0], c="tab:red", **kwargs)
 
     ax.set_title(f"{name}\n Total distance: {solution.cost}")
     ax.set_xlabel("X-coordinate")
     ax.set_ylabel("Y-coordinate")
     ax.legend(frameon=False, ncol=3)
-    
+
+
 def show_map(solution):
     dict_new = {}
     for i in solution[0]:
         dict_new[i] = dict_points[i]
-    
+
     fig = go.Figure()
-    fig.add_trace(go.Scattermapbox(lat=[dict_points[solution[0][0]][0]], lon=[dict_points[solution[0][0]][1]], mode = 'markers+lines', marker = {'size': 8}))
+    fig.add_trace(go.Scattermapbox(lat=[dict_points[solution[0][0]][0]], lon=[
+                  dict_points[solution[0][0]][1]], mode='markers+lines', marker={'size': 8}))
     for i in range(len(solution)):
-        list_route= []
+        list_route = []
         for j in solution[i]:
             list_route.append(dict_points[j])
-        fig.add_trace(go.Scattermapbox(lat=[i[0] for i in list_route], lon=[i[1] for i in list_route], mode = 'markers+lines', marker = {'size': 8}))
+        fig.add_trace(
+            go.Scattermapbox(
+                lat=[
+                    i[0] for i in list_route],
+                lon=[
+                    i[1] for i in list_route],
+                mode='markers+lines',
+                marker={
+                    'size': 8}))
     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 40}, mapbox={
                       'zoom': 5, "center": {'lat': 44, 'lon': 0}})
     fig.update_layout(mapbox_style="open-street-map")
     return fig
-        
+
+
 def route_cost(route):
     distances = data["edge_weight"]
     tour = [0] + route + [0]
 
     return sum(distances[tour[idx]][tour[idx + 1]]
                for idx in range(len(tour) - 1))
+
 
 def random_removal(state, rnd_state):
     """
@@ -98,6 +93,7 @@ def remove_empty_routes(state):
     """
     state.routes = [route for route in state.routes if len(route) != 0]
     return state
+
 
 def greedy_repair(state, rnd_state):
     """
